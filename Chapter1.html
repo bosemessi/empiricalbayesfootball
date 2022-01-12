@@ -4,8 +4,9 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Collecting data from fbref &#8212; Recreating David Robinson&#39;s Wonderful Posts on Empirical Bayes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>1. Collecting data from fbref &#8212; Recreating David Robinson&#39;s Wonderful Posts on Empirical Bayes</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -52,7 +53,7 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Modelling shot conversion rates with beta distribution, and performing empirical Bayes update." href="Chapter2.html" />
+    <link rel="next" title="2. Modelling shot conversion rates with beta distribution, and performing empirical Bayes update." href="Chapter2.html" />
     <link rel="prev" title="This is an attempt to recreate David Robinson’s wonderful posts on empirical bayes, changing the application context from baseball to football(soccer), and the metric from batting % to shot conversion %." href="intro.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -100,17 +101,22 @@
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Collecting data from fbref
+   1. Collecting data from fbref
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="Chapter2.html">
-   Modelling shot conversion rates with beta distribution, and performing empirical Bayes update.
+   2. Modelling shot conversion rates with beta distribution, and performing empirical Bayes update.
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="Chapter3.html">
-   Credible intervals
+   3. Credible intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chapter4.html">
+   4. Hypothesis Testing, FDR
   </a>
  </li>
 </ul>
@@ -220,8 +226,8 @@
         
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="collecting-data-from-fbref">
-<h1>Collecting data from fbref<a class="headerlink" href="#collecting-data-from-fbref" title="Permalink to this headline">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="collecting-data-from-fbref">
+<h1><span class="section-number">1. </span>Collecting data from fbref<a class="headerlink" href="#collecting-data-from-fbref" title="Permalink to this headline">¶</a></h1>
 <p>We will start by collecting the shots data from fbref 2017-18 onwards (since that has the advanced stats like xG) for the top 5 leagues. First let’s import the necessary packages.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -316,7 +322,7 @@
       <td>Yunis Abdelhamid (1987)</td>
       <td>DF</td>
       <td>1987</td>
-      <td>19.0</td>
+      <td>18.0</td>
       <td>1.0</td>
       <td>14.0</td>
       <td>0.0</td>
@@ -483,7 +489,7 @@
       <td>...</td>
     </tr>
     <tr>
-      <th>4719</th>
+      <th>4702</th>
       <td>Łukasz Teodorczyk (1991)</td>
       <td>6.9</td>
       <td>1.0</td>
@@ -495,9 +501,9 @@
       <td>30.0</td>
     </tr>
     <tr>
-      <th>4720</th>
+      <th>4703</th>
       <td>Šime Vrsaljko (1992)</td>
-      <td>39.4</td>
+      <td>39.1</td>
       <td>1.0</td>
       <td>8.0</td>
       <td>0.0</td>
@@ -507,7 +513,7 @@
       <td>29.0</td>
     </tr>
     <tr>
-      <th>4721</th>
+      <th>4704</th>
       <td>Žan Celar (1999)</td>
       <td>0.1</td>
       <td>0.0</td>
@@ -519,7 +525,7 @@
       <td>22.0</td>
     </tr>
     <tr>
-      <th>4722</th>
+      <th>4705</th>
       <td>Žan Majer (1992)</td>
       <td>18.5</td>
       <td>1.0</td>
@@ -531,9 +537,9 @@
       <td>29.0</td>
     </tr>
     <tr>
-      <th>4723</th>
+      <th>4706</th>
       <td>Ștefan Radu (1986)</td>
-      <td>110.1</td>
+      <td>109.1</td>
       <td>1.0</td>
       <td>32.0</td>
       <td>0.0</td>
@@ -544,10 +550,10 @@
     </tr>
   </tbody>
 </table>
-<p>4724 rows × 9 columns</p>
+<p>4707 rows × 9 columns</p>
 </div></div></div>
 </div>
-</div>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -584,7 +590,7 @@
     <a class='right-next' id="next-link" href="Chapter2.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Modelling shot conversion rates with beta distribution, and performing empirical Bayes update.</p>
+        <p class="prev-next-title"><span class="section-number">2. </span>Modelling shot conversion rates with beta distribution, and performing empirical Bayes update.</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
