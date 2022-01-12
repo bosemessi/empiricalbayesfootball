@@ -3,8 +3,11 @@
 
 format: jb-book
 root: intro
+options:
+  numbered: true
 chapters:
 - file: Chapter1
 - file: Chapter2
 - file: Chapter3
+- file: Chapter4
 

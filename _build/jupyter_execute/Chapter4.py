@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Hall of Fame Shot Conversion %
+# # Hypothesis Testing, FDR
 # 
-# Now, it's time to take a look at hypothesis testing. Using false discovery rate control, we answer the burning question that we have always wanted to answer in our lifetime : are Messi and Ronaldo elite at shot conversion ?
+# Now, it's time to take a look at hypothesis testing. Using posterior error probability (PEP), we answer the burning question that we have always wanted to answer in our lifetime : are Messi and Ronaldo elite at shot conversion ?
 
 # In[1]:
 

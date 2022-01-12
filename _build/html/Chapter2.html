@@ -4,8 +4,9 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Modelling shot conversion rates with beta distribution, and performing empirical Bayes update. &#8212; Recreating David Robinson&#39;s Wonderful Posts on Empirical Bayes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>2. Modelling shot conversion rates with beta distribution, and performing empirical Bayes update. &#8212; Recreating David Robinson&#39;s Wonderful Posts on Empirical Bayes</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -59,8 +60,8 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Credible intervals" href="Chapter3.html" />
-    <link rel="prev" title="Collecting data from fbref" href="Chapter1.html" />
+    <link rel="next" title="3. Credible intervals" href="Chapter3.html" />
+    <link rel="prev" title="1. Collecting data from fbref" href="Chapter1.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -107,17 +108,22 @@
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="Chapter1.html">
-   Collecting data from fbref
+   1. Collecting data from fbref
   </a>
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Modelling shot conversion rates with beta distribution, and performing empirical Bayes update.
+   2. Modelling shot conversion rates with beta distribution, and performing empirical Bayes update.
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="Chapter3.html">
-   Credible intervals
+   3. Credible intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chapter4.html">
+   4. Hypothesis Testing, FDR
   </a>
  </li>
 </ul>
@@ -227,8 +233,8 @@
         
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="modelling-shot-conversion-rates-with-beta-distribution-and-performing-empirical-bayes-update">
-<h1>Modelling shot conversion rates with beta distribution, and performing empirical Bayes update.<a class="headerlink" href="#modelling-shot-conversion-rates-with-beta-distribution-and-performing-empirical-bayes-update" title="Permalink to this headline">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="modelling-shot-conversion-rates-with-beta-distribution-and-performing-empirical-bayes-update">
+<h1><span class="section-number">2. </span>Modelling shot conversion rates with beta distribution, and performing empirical Bayes update.<a class="headerlink" href="#modelling-shot-conversion-rates-with-beta-distribution-and-performing-empirical-bayes-update" title="Permalink to this headline">¶</a></h1>
 <p>This is like a zeroth iteration of a finishing skill estimation. We won’t be using the advanced stats (xG) here. We simply take a look at shot conversion rates - non-penalty goals/non-penalty xG. As it turns out, quantities like these can be modeled by a “beta” distribution (conjugate to binomial processes - shot is either converted or not). As I said - extremely simplistic view of goalscoring. We start with a “prior” distribution that is created empirically. That is, we use the data of the entire population to create our prior beta distribution model. Once we have our priors, we update the model for each player using their shots and npGs. Start by loading the necessary libraries. We will using scipy.stats for the models.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -415,7 +421,7 @@
 <img alt="_images/Chapter2_8_0.png" src="_images/Chapter2_8_0.png" />
 </div>
 </div>
-</div>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -446,13 +452,13 @@
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Collecting data from fbref</p>
+            <p class="prev-next-title"><span class="section-number">1. </span>Collecting data from fbref</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="Chapter3.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Credible intervals</p>
+        <p class="prev-next-title"><span class="section-number">3. </span>Credible intervals</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
