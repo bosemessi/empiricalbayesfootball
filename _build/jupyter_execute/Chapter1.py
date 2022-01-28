@@ -53,7 +53,7 @@ df.head()
 
 # We will use the unique combinations (hopefully) of name + birth year to groupby and get total shots, total non-penalty goals, total non-penalty xG, Age, total 90s played etc.
 
-# In[9]:
+# In[4]:
 
 
 gdf = df.groupby('Player').sum().reset_index()
@@ -65,7 +65,7 @@ gdf['Age'] = 2021 - gdf['Born']
 gdf.to_csv('fbrefshootingdata.csv', index=False, encoding='utf-8-sig')
 
 
-# In[10]:
+# In[5]:
 
 
 gdf
