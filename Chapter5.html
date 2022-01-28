@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Bayesian A/B Testing &#8212; Recreating David Robinson&#39;s Wonderful Posts on Empirical Bayes</title>
+    <title>5. Bayesian A/B Testing &#8212; Recreating David Robinson&#39;s Wonderful Posts on Empirical Bayes</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -60,8 +60,31 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="6. Beta-binomial regression" href="Chapter6.html" />
+    <link rel="prev" title="4. Hypothesis Testing, FDR" href="Chapter4.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -105,7 +128,7 @@
   </a>
  </li>
 </ul>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="Chapter1.html">
    1. Collecting data from fbref
@@ -126,9 +149,14 @@
    4. Hypothesis Testing, FDR
   </a>
  </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   5. Bayesian A/B Testing
+  </a>
+ </li>
  <li class="toctree-l1">
   <a class="reference internal" href="Chapter6.html">
-   5. Beta-binomial regression
+   6. Beta-binomial regression
   </a>
  </li>
 </ul>
@@ -172,7 +200,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/chapter5.ipynb"><button type="button"
+        <a class="dropdown-buttons" href="_sources/Chapter5.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.ipynb</button></a>
         <!-- Download PDF via print -->
@@ -192,7 +220,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/bosemessi/empiricalbayesfootball/issues/new?title=Issue%20on%20page%20%2Fchapter5.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/bosemessi/empiricalbayesfootball/issues/new?title=Issue%20on%20page%20%2FChapter5.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -213,7 +241,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/bosemessi/empiricalbayesfootball/master?urlpath=tree/docs/chapter5.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/bosemessi/empiricalbayesfootball/master?urlpath=tree/docs/Chapter5.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="_static/images/logo_binder.svg"
@@ -239,7 +267,7 @@
               <div>
                 
   <section class="tex2jax_ignore mathjax_ignore" id="bayesian-a-b-testing">
-<h1>Bayesian A/B Testing<a class="headerlink" href="#bayesian-a-b-testing" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">5. </span>Bayesian A/B Testing<a class="headerlink" href="#bayesian-a-b-testing" title="Permalink to this headline">¶</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
@@ -305,7 +333,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/chapter5_6_0.png" src="_images/chapter5_6_0.png" />
+<img alt="_images/Chapter5_6_0.png" src="_images/Chapter5_6_0.png" />
 </div>
 </div>
 <p>Method 2 : Exact formula for Beta distributions. Suppose you have the two distributions as <span class="math notranslate nohighlight">\( p_A \sim Beta(\alpha_A, \beta_A) \)</span> and <span class="math notranslate nohighlight">\( p_B \sim Beta(\alpha_B, \beta_B) \)</span> Then, the probability that <span class="math notranslate nohighlight">\(p_B &gt; p_A \)</span> is given by</p>
@@ -363,7 +391,7 @@ Independent (H0 holds true)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/chapter5_11_0.png" src="_images/chapter5_11_0.png" />
+<img alt="_images/Chapter5_11_0.png" src="_images/Chapter5_11_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -375,7 +403,7 @@ Independent (H0 holds true)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/chapter5_12_0.png" src="_images/chapter5_12_0.png" />
+<img alt="_images/Chapter5_12_0.png" src="_images/Chapter5_12_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -385,7 +413,7 @@ Independent (H0 holds true)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.02160092, 0.06977754])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.02200152, 0.06962398])
 </pre></div>
 </div>
 </div>
@@ -416,7 +444,21 @@ Independent (H0 holds true)
               
         
             <!-- Previous / next buttons -->
-<div class='prev-next-area'>
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="Chapter4.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">4. </span>Hypothesis Testing, FDR</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="Chapter6.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">6. </span>Beta-binomial regression</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
         
         </div>
