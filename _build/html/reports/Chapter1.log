@@ -1,0 +1,39 @@
+Traceback (most recent call last):
+  File "c:\users\bosem\anaconda3\lib\site-packages\nbclient\client.py", line 626, in _async_poll_for_reply
+    msg = await ensure_async(self.kc.shell_channel.get_msg(timeout=new_timeout))
+  File "c:\users\bosem\anaconda3\lib\site-packages\nbclient\util.py", line 96, in ensure_async
+    result = await obj
+  File "c:\users\bosem\anaconda3\lib\site-packages\jupyter_client\asynchronous\channels.py", line 48, in get_msg
+    raise Empty
+_queue.Empty
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\users\bosem\anaconda3\lib\site-packages\jupyter_cache\executors\utils.py", line 56, in single_nb_execution
+    record_timing=False,
+  File "c:\users\bosem\anaconda3\lib\site-packages\nbclient\client.py", line 1093, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "c:\users\bosem\anaconda3\lib\site-packages\nbclient\util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "c:\users\bosem\anaconda3\lib\site-packages\nbclient\util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "c:\users\bosem\anaconda3\lib\asyncio\base_events.py", line 583, in run_until_complete
+    return future.result()
+  File "c:\users\bosem\anaconda3\lib\site-packages\nbclient\client.py", line 560, in async_execute
+    cell, index, execution_count=self.code_cells_executed + 1
+  File "c:\users\bosem\anaconda3\lib\site-packages\nbclient\client.py", line 838, in async_execute_cell
+    exec_reply = await self.task_poll_for_reply
+  File "c:\users\bosem\anaconda3\lib\site-packages\nbclient\client.py", line 650, in _async_poll_for_reply
+    await self._async_handle_timeout(timeout, cell)
+  File "c:\users\bosem\anaconda3\lib\site-packages\nbclient\client.py", line 698, in _async_handle_timeout
+    "Cell execution timed out", timeout, cell
+nbclient.exceptions.CellTimeoutError: A cell timed out while it was being executed, after 30 seconds.
+The message was: Cell execution timed out.
+Here is a preview of the cell contents:
+-------------------
+["urls = ['https://fbref.com/en/comps/Big5/shooting/players/Big-5-European-Leagues-Stats',", "       'https://fbref.com/en/comps/Big5/2020-2021/shooting/players/2020-2021-Big-5-European-Leagues-Stats',", "       'https://fbref.com/en/comps/Big5/2019-2020/shooting/players/2019-2020-Big-5-European-Leagues-Stats',", "       'https://fbref.com/en/comps/Big5/2018-2019/shooting/players/2018-2019-Big-5-European-Leagues-Stats',", "       'https://fbref.com/en/comps/Big5/2017-2018/shooting/players/2017-2018-Big-5-European-Leagues-Stats']"]
+...
+['        df[cols] = df[cols].astype(float)', '    df.fillna(value=0.0, inplace=True)', '    dfs.append(df)', '    ', 'df = pd.concat(dfs, ignore_index=True)']
+-------------------
+

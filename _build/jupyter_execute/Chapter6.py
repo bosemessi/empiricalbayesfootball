@@ -167,3 +167,102 @@ ax[2].legend();
 
 
 # There is only a tiny bit of improvement - players with fewer shots are not being too over-estimated. There is overall a bit more shrinkage of the data, and follows the trendline. But the effect isn't super strong.
+# 
+# Let's try a log-linear fit as well like David does in his notes. 
+
+# In[7]:
+
+
+def BBLL1(params,Y,N):
+    mu0, mu1, phi = params
+    mu = special.expit(mu0 + mu1*np.log10(N)) 
+    a = mu*phi
+    b = (1-mu)*phi
+    t1 = special.loggamma(N+1+1e-15) - special.loggamma(Y+1+1e-15) - special.loggamma(N-Y+1+1e-15)  
+    t2 = special.loggamma(Y+a+1e-15) + special.loggamma(N-Y+b+1e-15) - special.loggamma(N+a+b+1e-15)
+    t3 = special.loggamma(a+b+1e-15) - special.loggamma(a+1e-15) - special.loggamma(b+1e-15)
+    total = -np.sum(t1 + t2 + t3)
+    return total
+res = minimize(BBLL1, x0=[0,0,100], args=(df.npG.values,df.Shots.values),
+               bounds=[(None,None),(None,None),(0,None)])
+mu0, mu1 = res.x[:-1]
+sigma0 = 1/res.x[-1]
+
+df['new_a'] = special.expit(mu0 + mu1*np.log10(df.Shots))/sigma0 + df['npG']
+df['new_b'] = (1 - special.expit(mu0 + mu1*np.log10(df.Shots)))/sigma0 + df['Shots'] - df['npG']
+df['new_Conv'] = df['new_a']/(df['new_a'] + df['new_b'])
+df.head()
+
+
+# In[8]:
+
+
+fig, ax = plt.subplots(figsize=(6,6))
+im = ax.scatter(df.Eb_Conv, df.new_Conv, c=df.Shots, cmap=mpl.cm.plasma);
+ax.plot(np.linspace(0, ax.get_xlim()[1],100), np.linspace(0, ax.get_xlim()[1],100), color='red', linestyle='--')
+ax.set_aspect('equal')
+ax.set_xlim(0, ax.get_xlim()[1])
+ax.set_ylim(0, ax.get_ylim()[1])
+ax.set_xlabel('Original EB Estimate')
+ax.set_ylabel('New EB Estimate')
+fig.colorbar(im, ax=ax, fraction=.03).set_label('Shot Attempts');
+ax.set_title('Effect of Beta-Binomial Regression', fontsize = 15);
+
+
+# In[9]:
+
+
+fig, ax = plt.subplots(figsize=(15,5),nrows=1,ncols=3, sharey=True)
+x = (df.Shots.values.reshape(-1,1))
+y = df.Conv.values
+model = LinearRegression().fit(np.log10(x), y)
+intc, slope = model.intercept_, model.coef_
+X = np.linspace(df.Shots.min(), df.Shots.max(), 100)
+Y = slope*np.log10(X) + intc
+ax[0].scatter(df.Shots, df.Conv, color='k')
+ax[0].plot(X, Y, color = 'b', ls='--',zorder=3, label='log-linear fit')
+ax[0].axhline(df.Conv.median(), color='r', ls = '--', zorder=2, label = 'prior median')
+ax[0].axhline(df.Conv.mean(), color='orange', ls = '--', zorder=2, label = 'prior mean')
+ax[0].set_xlabel('Shots')
+ax[0].set_ylabel('Raw shot conversion')
+ax[0].set_title('Shots vs conversion')
+ax[0].grid();
+ax[0].legend();
+ax[0].set_xscale('log')
+
+x = (df.Shots.values.reshape(-1,1))
+y = df.Eb_Conv.values
+model = LinearRegression().fit(np.log10(x), y)
+intc, slope = model.intercept_, model.coef_
+X = np.linspace(df.Shots.min(), df.Shots.max(), 100)
+Y = slope*np.log10(X) + intc
+ax[1].scatter(df.Shots, df.Eb_Conv, color='k')
+ax[1].plot(X, Y, color = 'b', ls='--',zorder=3, label='log-linear fit on shrunk data')
+ax[1].axhline(df.Conv.median(), color='r', ls = '--', zorder=2, label = 'prior median')
+ax[1].axhline(df.Conv.mean(), color='orange', ls = '--', zorder=2, label = 'prior mean')
+ax[1].set_xlabel('Shots')
+ax[1].set_ylabel('Estimated Bayes shot conversion')
+ax[1].set_title('Shots vs conversion')
+ax[1].grid();
+ax[1].legend();
+ax[1].set_xscale('log')
+
+x = (df.Shots.values.reshape(-1,1))
+y = df.new_Conv.values
+model = LinearRegression().fit(np.log10(x), y)
+intc, slope = model.intercept_, model.coef_
+X = np.linspace(df.Shots.min(), df.Shots.max(), 100)
+Y = slope*np.log10(X) + intc
+ax[2].scatter(df.Shots, df.new_Conv, color='k')
+ax[2].plot(X, Y, color = 'b', ls='--',zorder=3, label='log-linear fit on new shrunk data')
+ax[2].axhline(df.Conv.median(), color='r', ls = '--', zorder=2, label = 'prior median')
+ax[2].axhline(df.Conv.mean(), color='orange', ls = '--', zorder=2, label = 'prior mean')
+ax[2].set_xlabel('Shots')
+ax[2].set_ylabel('New Estimated Bayes shot conversion')
+ax[2].set_title('Shots vs conversion')
+ax[2].grid();
+ax[2].legend();
+ax[2].set_xscale('log')
+
+
+# Once again, its something noticable going from the raw rate to the fixed prior estimates to the log-linear regression based prior estimates, but not a super-strong effect. 

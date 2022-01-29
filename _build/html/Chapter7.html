@@ -1,0 +1,721 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Hierarchical Models &#8212; Recreating David Robinson&#39;s Wonderful Posts on Empirical Bayes</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Recreating David Robinson's Wonderful Posts on Empirical Bayes</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
+   This is an attempt to recreate David Robinson’s wonderful posts on empirical bayes, changing the application context from baseball to football(soccer), and the metric from batting % to shot conversion %.
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chapter1.html">
+   1. Collecting data from fbref
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chapter2.html">
+   2. Modelling shot conversion rates with beta distribution, and performing empirical Bayes update.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chapter3.html">
+   3. Credible intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chapter4.html">
+   4. Hypothesis Testing, FDR
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chapter5.html">
+   5. Bayesian A/B Testing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chapter6.html">
+   6. Beta-binomial regression
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/Chapter7.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/bosemessi/empiricalbayesfootball"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/bosemessi/empiricalbayesfootball/issues/new?title=Issue%20on%20page%20%2FChapter7.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/bosemessi/empiricalbayesfootball/master?urlpath=tree/docs/Chapter7.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="hierarchical-models">
+<h1>Hierarchical Models<a class="headerlink" href="#hierarchical-models" title="Permalink to this headline">¶</a></h1>
+<p>This chapter continues from where the last one ended and explores more varieties of hierarchical models. Here I’ve explored npxG/Shot as the means to modify the priors using regression. There is definitely a strong correlation between the two which is not unsurprising to me at all. What’s not entirely clear to me is whether this should be used as an input to modify the priors. I could probably argue for, but would wait for more expert opinions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+
+<span class="kn">import</span> <span class="nn">scipy.special</span> <span class="k">as</span> <span class="nn">special</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">beta</span><span class="p">,</span><span class="n">binom</span><span class="p">,</span><span class="n">chi2_contingency</span><span class="p">,</span><span class="n">gaussian_kde</span><span class="p">,</span><span class="n">rv_continuous</span><span class="p">,</span><span class="n">norm</span><span class="p">,</span><span class="n">rv_histogram</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="k">as</span> <span class="nn">cm</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;fbrefshootingdata.csv&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8-sig&#39;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">npG</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Shots</span> <span class="o">&gt;=</span> <span class="mi">50</span><span class="p">)]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Conv&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;npG&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shots&#39;</span><span class="p">]</span>
+<span class="n">bf</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Conv&#39;</span><span class="p">],</span> <span class="n">floc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fscale</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Eb_Conv&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;npG&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">bf</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shots&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">bf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">bf</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;npG&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">bf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shots&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">bf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;npG&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;90s&#39;</span><span class="p">:</span><span class="s1">&#39;Nineties&#39;</span><span class="p">},</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;npxG/Shot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;npxG&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shots&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Player</th>
+      <th>Nineties</th>
+      <th>Goals</th>
+      <th>Shots</th>
+      <th>PKs</th>
+      <th>npxG</th>
+      <th>npG</th>
+      <th>Born</th>
+      <th>Age</th>
+      <th>Conv</th>
+      <th>Eb_Conv</th>
+      <th>a</th>
+      <th>b</th>
+      <th>npxG/Shot</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Aaron Connolly (2000)</td>
+      <td>24.5</td>
+      <td>5.0</td>
+      <td>63.0</td>
+      <td>0.0</td>
+      <td>7.2</td>
+      <td>5.0</td>
+      <td>2000.0</td>
+      <td>21.0</td>
+      <td>0.079365</td>
+      <td>0.085783</td>
+      <td>8.648493</td>
+      <td>92.169808</td>
+      <td>0.114286</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Aaron Cresswell (1989)</td>
+      <td>133.0</td>
+      <td>5.0</td>
+      <td>78.0</td>
+      <td>0.0</td>
+      <td>3.9</td>
+      <td>5.0</td>
+      <td>1989.0</td>
+      <td>32.0</td>
+      <td>0.064103</td>
+      <td>0.074673</td>
+      <td>8.648493</td>
+      <td>107.169808</td>
+      <td>0.050000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Aaron Leya Iseka (1997)</td>
+      <td>35.8</td>
+      <td>10.0</td>
+      <td>73.0</td>
+      <td>3.0</td>
+      <td>10.0</td>
+      <td>7.0</td>
+      <td>1997.0</td>
+      <td>24.0</td>
+      <td>0.095890</td>
+      <td>0.096090</td>
+      <td>10.648493</td>
+      <td>100.169808</td>
+      <td>0.136986</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Aaron Mooy (1990)</td>
+      <td>83.2</td>
+      <td>9.0</td>
+      <td>100.0</td>
+      <td>2.0</td>
+      <td>5.5</td>
+      <td>7.0</td>
+      <td>1990.0</td>
+      <td>31.0</td>
+      <td>0.070000</td>
+      <td>0.077265</td>
+      <td>10.648493</td>
+      <td>127.169808</td>
+      <td>0.055000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Aaron Ramsey (1990)</td>
+      <td>60.2</td>
+      <td>16.0</td>
+      <td>139.0</td>
+      <td>0.0</td>
+      <td>17.1</td>
+      <td>16.0</td>
+      <td>1990.0</td>
+      <td>31.0</td>
+      <td>0.115108</td>
+      <td>0.111123</td>
+      <td>19.648493</td>
+      <td>157.169808</td>
+      <td>0.123022</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_fit</span><span class="p">(</span><span class="n">qty1</span><span class="p">,</span><span class="n">qty2</span><span class="p">,</span><span class="n">xlabel</span><span class="p">,</span><span class="n">ylabel</span><span class="p">,</span><span class="n">title</span><span class="p">,</span><span class="n">ax</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">qty1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">qty2</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">intc</span><span class="p">,</span> <span class="n">slope</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">intercept_</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">qty1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="n">qty2</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">slope</span><span class="o">*</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">+</span> <span class="n">intc</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">qty1</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="n">qty2</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;linear fit&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Conv</span><span class="o">.</span><span class="n">median</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">ls</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;prior median&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">();</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">plot_fit</span><span class="p">(</span><span class="s1">&#39;npxG/Shot&#39;</span><span class="p">,</span> <span class="s1">&#39;Conv&#39;</span><span class="p">,</span> <span class="s1">&#39;npxG/Shot&#39;</span><span class="p">,</span> <span class="s1">&#39;Raw Conversion rate&#39;</span><span class="p">,</span><span class="s1">&#39;Conversion vs npxG/shot&#39;</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Chapter7_3_0.png" src="_images/Chapter7_3_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">BBLL1</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">Shots</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">mu0</span><span class="p">,</span> <span class="n">mu1</span><span class="p">,</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">params</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">special</span><span class="o">.</span><span class="n">expit</span><span class="p">(</span><span class="n">mu0</span> <span class="o">+</span> <span class="n">mu1</span><span class="o">*</span><span class="n">X</span><span class="p">)</span> 
+    <span class="n">a</span> <span class="o">=</span> <span class="n">mu</span><span class="o">*</span><span class="n">phi</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">mu</span><span class="p">)</span><span class="o">*</span><span class="n">phi</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span> <span class="o">-</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">Y</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span> <span class="o">-</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="n">Y</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span>  
+    <span class="n">t2</span> <span class="o">=</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">Y</span><span class="o">+</span><span class="n">a</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span> <span class="o">+</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="n">Y</span><span class="o">+</span><span class="n">b</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span> <span class="o">-</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span>
+    <span class="n">t3</span> <span class="o">=</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span> <span class="o">-</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span> <span class="o">-</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">b</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">t1</span> <span class="o">+</span> <span class="n">t2</span> <span class="o">+</span> <span class="n">t3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">total</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">BBLL1</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">],</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">npG</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;npxG/Shot&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">),</span>
+               <span class="n">bounds</span><span class="o">=</span><span class="p">[(</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">),(</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="kc">None</span><span class="p">)])</span>
+<span class="n">mu0</span><span class="p">,</span> <span class="n">mu1</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">sigma0</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">special</span><span class="o">.</span><span class="n">expit</span><span class="p">(</span><span class="n">mu0</span> <span class="o">+</span> <span class="n">mu1</span><span class="o">*</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;npxG/Shot&#39;</span><span class="p">])</span><span class="o">/</span><span class="n">sigma0</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;npG&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">special</span><span class="o">.</span><span class="n">expit</span><span class="p">(</span><span class="n">mu0</span> <span class="o">+</span> <span class="n">mu1</span><span class="o">*</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;npxG/Shot&#39;</span><span class="p">]))</span><span class="o">/</span><span class="n">sigma0</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shots&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;npG&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_Conv&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_a&#39;</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_a&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_b&#39;</span><span class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Player</th>
+      <th>Nineties</th>
+      <th>Goals</th>
+      <th>Shots</th>
+      <th>PKs</th>
+      <th>npxG</th>
+      <th>npG</th>
+      <th>Born</th>
+      <th>Age</th>
+      <th>Conv</th>
+      <th>Eb_Conv</th>
+      <th>a</th>
+      <th>b</th>
+      <th>npxG/Shot</th>
+      <th>new_a</th>
+      <th>new_b</th>
+      <th>new_Conv</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Aaron Connolly (2000)</td>
+      <td>24.5</td>
+      <td>5.0</td>
+      <td>63.0</td>
+      <td>0.0</td>
+      <td>7.2</td>
+      <td>5.0</td>
+      <td>2000.0</td>
+      <td>21.0</td>
+      <td>0.079365</td>
+      <td>0.085783</td>
+      <td>8.648493</td>
+      <td>92.169808</td>
+      <td>0.114286</td>
+      <td>90.839154</td>
+      <td>747.838773</td>
+      <td>0.108312</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Aaron Cresswell (1989)</td>
+      <td>133.0</td>
+      <td>5.0</td>
+      <td>78.0</td>
+      <td>0.0</td>
+      <td>3.9</td>
+      <td>5.0</td>
+      <td>1989.0</td>
+      <td>32.0</td>
+      <td>0.064103</td>
+      <td>0.074673</td>
+      <td>8.648493</td>
+      <td>107.169808</td>
+      <td>0.050000</td>
+      <td>51.393793</td>
+      <td>802.284135</td>
+      <td>0.060203</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Aaron Leya Iseka (1997)</td>
+      <td>35.8</td>
+      <td>10.0</td>
+      <td>73.0</td>
+      <td>3.0</td>
+      <td>10.0</td>
+      <td>7.0</td>
+      <td>1997.0</td>
+      <td>24.0</td>
+      <td>0.095890</td>
+      <td>0.096090</td>
+      <td>10.648493</td>
+      <td>100.169808</td>
+      <td>0.136986</td>
+      <td>112.660831</td>
+      <td>736.017096</td>
+      <td>0.132749</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Aaron Mooy (1990)</td>
+      <td>83.2</td>
+      <td>9.0</td>
+      <td>100.0</td>
+      <td>2.0</td>
+      <td>5.5</td>
+      <td>7.0</td>
+      <td>1990.0</td>
+      <td>31.0</td>
+      <td>0.070000</td>
+      <td>0.077265</td>
+      <td>10.648493</td>
+      <td>127.169808</td>
+      <td>0.055000</td>
+      <td>55.722901</td>
+      <td>819.955027</td>
+      <td>0.063634</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Aaron Ramsey (1990)</td>
+      <td>60.2</td>
+      <td>16.0</td>
+      <td>139.0</td>
+      <td>0.0</td>
+      <td>17.1</td>
+      <td>16.0</td>
+      <td>1990.0</td>
+      <td>31.0</td>
+      <td>0.115108</td>
+      <td>0.111123</td>
+      <td>19.648493</td>
+      <td>157.169808</td>
+      <td>0.123022</td>
+      <td>109.050149</td>
+      <td>805.627779</td>
+      <td>0.119222</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Eb_Conv</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">new_Conv</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;npxG/Shot&#39;</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">plasma</span><span class="p">);</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span><span class="mi">100</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span><span class="mi">100</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Original EB Estimate&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;New EB Estimate&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=.</span><span class="mi">03</span><span class="p">)</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;npxG/Shot&#39;</span><span class="p">);</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Effect of Beta-Binomial Regression&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">15</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Chapter7_5_0.png" src="_images/Chapter7_5_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plot_fit</span><span class="p">(</span><span class="s1">&#39;npxG/Shot&#39;</span><span class="p">,</span> <span class="s1">&#39;Conv&#39;</span><span class="p">,</span> <span class="s1">&#39;npxG/Shot&#39;</span><span class="p">,</span> <span class="s1">&#39;Raw Conversion rate&#39;</span><span class="p">,</span><span class="s1">&#39;Conversion vs npxG/shot&#39;</span><span class="p">,</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plot_fit</span><span class="p">(</span><span class="s1">&#39;npxG/Shot&#39;</span><span class="p">,</span> <span class="s1">&#39;Eb_Conv&#39;</span><span class="p">,</span> <span class="s1">&#39;npxG/Shot&#39;</span><span class="p">,</span> <span class="s1">&#39;Eb Conversion rate&#39;</span><span class="p">,</span><span class="s1">&#39;Eb Conversion vs npxG/shot&#39;</span><span class="p">,</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plot_fit</span><span class="p">(</span><span class="s1">&#39;npxG/Shot&#39;</span><span class="p">,</span> <span class="s1">&#39;new_Conv&#39;</span><span class="p">,</span> <span class="s1">&#39;npxG/Shot&#39;</span><span class="p">,</span> <span class="s1">&#39;New Eb Conversion rate&#39;</span><span class="p">,</span><span class="s1">&#39;Regression Eb Conversion vs npxG/shot&#39;</span><span class="p">,</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Chapter7_6_0.png" src="_images/Chapter7_6_0.png" />
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Soumyajit Bose<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>
