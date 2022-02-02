@@ -292,6 +292,7 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
 <span class="o">%</span><span class="k">autoreload</span> 2
 
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">CubicSpline</span><span class="p">,</span> <span class="n">BSpline</span>
 <span class="kn">import</span> <span class="nn">scipy.special</span> <span class="k">as</span> <span class="nn">special</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">beta</span><span class="p">,</span><span class="n">binom</span><span class="p">,</span><span class="n">chi2_contingency</span><span class="p">,</span><span class="n">gaussian_kde</span><span class="p">,</span><span class="n">rv_continuous</span><span class="p">,</span><span class="n">norm</span><span class="p">,</span><span class="n">rv_histogram</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
@@ -313,6 +314,7 @@
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shots&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">bf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;npG&#39;</span><span class="p">]</span>
 <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;90s&#39;</span><span class="p">:</span><span class="s1">&#39;Nineties&#39;</span><span class="p">},</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;npxG/Shot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;npxG&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shots&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shots/90&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shots&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Nineties&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -356,6 +358,7 @@
       <th>a</th>
       <th>b</th>
       <th>npxG/Shot</th>
+      <th>Shots/90</th>
     </tr>
   </thead>
   <tbody>
@@ -375,6 +378,7 @@
       <td>8.648493</td>
       <td>92.169808</td>
       <td>0.114286</td>
+      <td>2.571429</td>
     </tr>
     <tr>
       <th>1</th>
@@ -392,6 +396,7 @@
       <td>8.648493</td>
       <td>107.169808</td>
       <td>0.050000</td>
+      <td>0.586466</td>
     </tr>
     <tr>
       <th>2</th>
@@ -409,6 +414,7 @@
       <td>10.648493</td>
       <td>100.169808</td>
       <td>0.136986</td>
+      <td>2.039106</td>
     </tr>
     <tr>
       <th>3</th>
@@ -426,6 +432,7 @@
       <td>10.648493</td>
       <td>127.169808</td>
       <td>0.055000</td>
+      <td>1.201923</td>
     </tr>
     <tr>
       <th>4</th>
@@ -443,6 +450,7 @@
       <td>19.648493</td>
       <td>157.169808</td>
       <td>0.123022</td>
+      <td>2.308970</td>
     </tr>
   </tbody>
 </table>
@@ -455,7 +463,7 @@
     <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">qty2</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
     <span class="n">intc</span><span class="p">,</span> <span class="n">slope</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">intercept_</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">qty1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="n">qty2</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">qty1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="n">qty1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">100</span><span class="p">)</span>
     <span class="n">Y</span> <span class="o">=</span> <span class="n">slope</span><span class="o">*</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">+</span> <span class="n">intc</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">qty1</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="n">qty2</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;linear fit&#39;</span><span class="p">)</span>
@@ -532,6 +540,7 @@
       <th>a</th>
       <th>b</th>
       <th>npxG/Shot</th>
+      <th>Shots/90</th>
       <th>new_a</th>
       <th>new_b</th>
       <th>new_Conv</th>
@@ -554,6 +563,7 @@
       <td>8.648493</td>
       <td>92.169808</td>
       <td>0.114286</td>
+      <td>2.571429</td>
       <td>90.839154</td>
       <td>747.838773</td>
       <td>0.108312</td>
@@ -574,6 +584,7 @@
       <td>8.648493</td>
       <td>107.169808</td>
       <td>0.050000</td>
+      <td>0.586466</td>
       <td>51.393793</td>
       <td>802.284135</td>
       <td>0.060203</td>
@@ -594,6 +605,7 @@
       <td>10.648493</td>
       <td>100.169808</td>
       <td>0.136986</td>
+      <td>2.039106</td>
       <td>112.660831</td>
       <td>736.017096</td>
       <td>0.132749</td>
@@ -614,6 +626,7 @@
       <td>10.648493</td>
       <td>127.169808</td>
       <td>0.055000</td>
+      <td>1.201923</td>
       <td>55.722901</td>
       <td>819.955027</td>
       <td>0.063634</td>
@@ -634,6 +647,7 @@
       <td>19.648493</td>
       <td>157.169808</td>
       <td>0.123022</td>
+      <td>2.308970</td>
       <td>109.050149</td>
       <td>805.627779</td>
       <td>0.119222</td>
@@ -674,6 +688,482 @@
 <img alt="_images/Chapter7_6_0.png" src="_images/Chapter7_6_0.png" />
 </div>
 </div>
+<p>This definitely seems like a pretty strong signal. Meesa like this.</p>
+<p>Okay, next up, I once again want to revisit using shots to modify <span class="math notranslate nohighlight">\(mu\)</span>. But this time I will go with shots per 90 instead of the absolute volume. Let’s see what happens….fingers crossed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">plot_fit</span><span class="p">(</span><span class="s1">&#39;Shots/90&#39;</span><span class="p">,</span> <span class="s1">&#39;Conv&#39;</span><span class="p">,</span> <span class="s1">&#39;Shots/90&#39;</span><span class="p">,</span> <span class="s1">&#39;Raw Conversion rate&#39;</span><span class="p">,</span><span class="s1">&#39;Conversion vs per match shot volume&#39;</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Chapter7_8_0.png" src="_images/Chapter7_8_0.png" />
+</div>
+</div>
+<p>There seems to be some signal here, but maybe not an awful lot. Let’s plough on and do the regression and check what happens with the shrinkage.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">BBLL1</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">],</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">npG</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shots/90&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">),</span>
+               <span class="n">bounds</span><span class="o">=</span><span class="p">[(</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">),(</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="kc">None</span><span class="p">)])</span>
+<span class="n">mu0</span><span class="p">,</span> <span class="n">mu1</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">sigma0</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">special</span><span class="o">.</span><span class="n">expit</span><span class="p">(</span><span class="n">mu0</span> <span class="o">+</span> <span class="n">mu1</span><span class="o">*</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shots/90&#39;</span><span class="p">])</span><span class="o">/</span><span class="n">sigma0</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;npG&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">special</span><span class="o">.</span><span class="n">expit</span><span class="p">(</span><span class="n">mu0</span> <span class="o">+</span> <span class="n">mu1</span><span class="o">*</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shots/90&#39;</span><span class="p">]))</span><span class="o">/</span><span class="n">sigma0</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shots&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;npG&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_Conv&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_a&#39;</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_a&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_b&#39;</span><span class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Player</th>
+      <th>Nineties</th>
+      <th>Goals</th>
+      <th>Shots</th>
+      <th>PKs</th>
+      <th>npxG</th>
+      <th>npG</th>
+      <th>Born</th>
+      <th>Age</th>
+      <th>Conv</th>
+      <th>Eb_Conv</th>
+      <th>a</th>
+      <th>b</th>
+      <th>npxG/Shot</th>
+      <th>Shots/90</th>
+      <th>new_a</th>
+      <th>new_b</th>
+      <th>new_Conv</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Aaron Connolly (2000)</td>
+      <td>24.5</td>
+      <td>5.0</td>
+      <td>63.0</td>
+      <td>0.0</td>
+      <td>7.2</td>
+      <td>5.0</td>
+      <td>2000.0</td>
+      <td>21.0</td>
+      <td>0.079365</td>
+      <td>0.085783</td>
+      <td>8.648493</td>
+      <td>92.169808</td>
+      <td>0.114286</td>
+      <td>2.571429</td>
+      <td>16.128553</td>
+      <td>146.851160</td>
+      <td>0.098960</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Aaron Cresswell (1989)</td>
+      <td>133.0</td>
+      <td>5.0</td>
+      <td>78.0</td>
+      <td>0.0</td>
+      <td>3.9</td>
+      <td>5.0</td>
+      <td>1989.0</td>
+      <td>32.0</td>
+      <td>0.064103</td>
+      <td>0.074673</td>
+      <td>8.648493</td>
+      <td>107.169808</td>
+      <td>0.050000</td>
+      <td>0.586466</td>
+      <td>12.634568</td>
+      <td>165.345145</td>
+      <td>0.070989</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Aaron Leya Iseka (1997)</td>
+      <td>35.8</td>
+      <td>10.0</td>
+      <td>73.0</td>
+      <td>3.0</td>
+      <td>10.0</td>
+      <td>7.0</td>
+      <td>1997.0</td>
+      <td>24.0</td>
+      <td>0.095890</td>
+      <td>0.096090</td>
+      <td>10.648493</td>
+      <td>100.169808</td>
+      <td>0.136986</td>
+      <td>2.039106</td>
+      <td>17.073589</td>
+      <td>155.906124</td>
+      <td>0.098703</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Aaron Mooy (1990)</td>
+      <td>83.2</td>
+      <td>9.0</td>
+      <td>100.0</td>
+      <td>2.0</td>
+      <td>5.5</td>
+      <td>7.0</td>
+      <td>1990.0</td>
+      <td>31.0</td>
+      <td>0.070000</td>
+      <td>0.077265</td>
+      <td>10.648493</td>
+      <td>127.169808</td>
+      <td>0.055000</td>
+      <td>1.201923</td>
+      <td>15.593814</td>
+      <td>184.385899</td>
+      <td>0.077977</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Aaron Ramsey (1990)</td>
+      <td>60.2</td>
+      <td>16.0</td>
+      <td>139.0</td>
+      <td>0.0</td>
+      <td>17.1</td>
+      <td>16.0</td>
+      <td>1990.0</td>
+      <td>31.0</td>
+      <td>0.115108</td>
+      <td>0.111123</td>
+      <td>19.648493</td>
+      <td>157.169808</td>
+      <td>0.123022</td>
+      <td>2.308970</td>
+      <td>26.596834</td>
+      <td>212.382879</td>
+      <td>0.111293</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Eb_Conv</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">new_Conv</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shots/90&#39;</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">plasma</span><span class="p">);</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span><span class="mi">100</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span><span class="mi">100</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Original EB Estimate&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;New EB Estimate&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=.</span><span class="mi">03</span><span class="p">)</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Shots/90&#39;</span><span class="p">);</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Effect of Beta-Binomial Regression&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">15</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Chapter7_11_0.png" src="_images/Chapter7_11_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plot_fit</span><span class="p">(</span><span class="s1">&#39;Shots/90&#39;</span><span class="p">,</span> <span class="s1">&#39;Conv&#39;</span><span class="p">,</span> <span class="s1">&#39;Shots/90&#39;</span><span class="p">,</span> <span class="s1">&#39;Raw Conversion rate&#39;</span><span class="p">,</span><span class="s1">&#39;Conversion vs per match shot volume&#39;</span><span class="p">,</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plot_fit</span><span class="p">(</span><span class="s1">&#39;Shots/90&#39;</span><span class="p">,</span> <span class="s1">&#39;Eb_Conv&#39;</span><span class="p">,</span> <span class="s1">&#39;Shots/90&#39;</span><span class="p">,</span> <span class="s1">&#39;Eb Conversion rate&#39;</span><span class="p">,</span><span class="s1">&#39;Eb Conversion vs per match shot volume&#39;</span><span class="p">,</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plot_fit</span><span class="p">(</span><span class="s1">&#39;Shots/90&#39;</span><span class="p">,</span> <span class="s1">&#39;new_Conv&#39;</span><span class="p">,</span> <span class="s1">&#39;Shots/90&#39;</span><span class="p">,</span> <span class="s1">&#39;New Eb Conversion rate&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;Regression Eb Conversion vs per match shot volume&#39;</span><span class="p">,</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Chapter7_12_0.png" src="_images/Chapter7_12_0.png" />
+</div>
+</div>
+<p>Hmm….looks very similar to the shot volume regression plots….maybe a bit stronger of an effect than the overall volume.</p>
+<p>Ok, I am happy to move on from shot volume (per match or overall). Let’s try something interesting now - age effect. Pretty much everyone would agree that Father Age comes for all no matter what the sport and no matter who the sportsperson(even Erioh Kure). Some do age like fine-wine(self-proclaimed) cough cough Zlatan, but the overall trend is indicative of a prime, a pre-prime and postprime (kind rephrasing for retirement). We have fbref data from 2017-18 to 2021-22, but aggregate, so we are going to use the current age of players in this era to determine age effects. Note that this suffers from two issues - (a) we don’t get an age curve here really….only one single number for each player. Ideally we would like to look at players’ performances over the years to understand the effect of aging. (b) There could be players who stopped playing in 2017-18, but their average age would be a bit higher since we are taking a 5 year period into account. Both issues fixable if I scraped the data accordingly, but I will keep that aside for a later chapter. Let’s just do a rough age effect estimate here.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">plot_fit</span><span class="p">(</span><span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="s1">&#39;Conv&#39;</span><span class="p">,</span> <span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="s1">&#39;Raw Conversion rate&#39;</span><span class="p">,</span><span class="s1">&#39;Age effect on conversion&#39;</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Chapter7_14_0.png" src="_images/Chapter7_14_0.png" />
+</div>
+</div>
+<p>Welp…not much of a pattern, is it ?!! I can see some nice oscillations, but no indication that conversion rate enjoys a prime. Or maybe, wait a second…this could be suffering small sample effects especially below 20 and above 36. We could group those players into two groups, under 21 and over 36 and replot.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;dummyAge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Age</span><span class="o">&lt;=</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Age</span><span class="o">&gt;=</span><span class="mi">36</span><span class="p">,</span><span class="mi">36</span><span class="p">,</span><span class="n">df</span><span class="o">.</span><span class="n">Age</span><span class="p">))</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">dummyAge</span><span class="o">==</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">Conv</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">37</span><span class="p">)]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Age effect on conversion rate&#39;</span><span class="p">);</span>
+<span class="n">bp</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;20-&#39;</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="mi">21</span><span class="o">+</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">)]</span><span class="o">+</span><span class="p">[</span><span class="s1">&#39;36+&#39;</span><span class="p">],</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">);</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Age&#39;</span><span class="p">);</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Raw Conv rate&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Chapter7_16_0.png" src="_images/Chapter7_16_0.png" />
+</div>
+</div>
+<p>Yeah, well….meh-ish oscillations all around. There is a “prime” at 21, and there is Zlatan at 36+. Can’t say much beyond that. We will model this with a cubic spline following David.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">k</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="k">def</span> <span class="nf">BBLL1</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">Shots</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">mu0</span><span class="p">,</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">params</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="n">spl</span> <span class="o">=</span> <span class="n">BSpline</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">special</span><span class="o">.</span><span class="n">expit</span><span class="p">(</span><span class="n">mu0</span> <span class="o">+</span> <span class="n">spl</span><span class="p">(</span><span class="n">X</span><span class="p">))</span> 
+    <span class="n">a</span> <span class="o">=</span> <span class="n">mu</span><span class="o">*</span><span class="n">phi</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">mu</span><span class="p">)</span><span class="o">*</span><span class="n">phi</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span> <span class="o">-</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">Y</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span> <span class="o">-</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="n">Y</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span>  
+    <span class="n">t2</span> <span class="o">=</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">Y</span><span class="o">+</span><span class="n">a</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span> <span class="o">+</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="n">Y</span><span class="o">+</span><span class="n">b</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span> <span class="o">-</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span>
+    <span class="n">t3</span> <span class="o">=</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span> <span class="o">-</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span> <span class="o">-</span> <span class="n">special</span><span class="o">.</span><span class="n">loggamma</span><span class="p">(</span><span class="n">b</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">)</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">t1</span> <span class="o">+</span> <span class="n">t2</span> <span class="o">+</span> <span class="n">t3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">total</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">BBLL1</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">npG</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;dummyAge&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">),</span>
+               <span class="n">bounds</span><span class="o">=</span><span class="p">[(</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="kc">None</span><span class="p">),(</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">),(</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">),(</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">),(</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">)])</span>
+<span class="n">mu0</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">sigma0</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">c0</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="n">spl</span> <span class="o">=</span> <span class="n">BSpline</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">c0</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">special</span><span class="o">.</span><span class="n">expit</span><span class="p">(</span><span class="n">mu0</span> <span class="o">+</span> <span class="n">spl</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;dummyAge&#39;</span><span class="p">]))</span><span class="o">/</span><span class="n">sigma0</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;npG&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">special</span><span class="o">.</span><span class="n">expit</span><span class="p">(</span><span class="n">mu0</span> <span class="o">+</span> <span class="n">spl</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;dummyAge&#39;</span><span class="p">])))</span><span class="o">/</span><span class="n">sigma0</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Shots&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;npG&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_Conv&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_a&#39;</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_a&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;new_b&#39;</span><span class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Player</th>
+      <th>Nineties</th>
+      <th>Goals</th>
+      <th>Shots</th>
+      <th>PKs</th>
+      <th>npxG</th>
+      <th>npG</th>
+      <th>Born</th>
+      <th>Age</th>
+      <th>Conv</th>
+      <th>Eb_Conv</th>
+      <th>a</th>
+      <th>b</th>
+      <th>npxG/Shot</th>
+      <th>Shots/90</th>
+      <th>new_a</th>
+      <th>new_b</th>
+      <th>new_Conv</th>
+      <th>dummyAge</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Aaron Connolly (2000)</td>
+      <td>24.5</td>
+      <td>5.0</td>
+      <td>63.0</td>
+      <td>0.0</td>
+      <td>7.2</td>
+      <td>5.0</td>
+      <td>2000.0</td>
+      <td>21.0</td>
+      <td>0.079365</td>
+      <td>0.085783</td>
+      <td>8.648493</td>
+      <td>92.169808</td>
+      <td>0.114286</td>
+      <td>2.571429</td>
+      <td>22.021266</td>
+      <td>140.978694</td>
+      <td>0.135100</td>
+      <td>21.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Aaron Cresswell (1989)</td>
+      <td>133.0</td>
+      <td>5.0</td>
+      <td>78.0</td>
+      <td>0.0</td>
+      <td>3.9</td>
+      <td>5.0</td>
+      <td>1989.0</td>
+      <td>32.0</td>
+      <td>0.064103</td>
+      <td>0.074673</td>
+      <td>8.648493</td>
+      <td>107.169808</td>
+      <td>0.050000</td>
+      <td>0.586466</td>
+      <td>13.799289</td>
+      <td>164.200671</td>
+      <td>0.077524</td>
+      <td>32.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Aaron Leya Iseka (1997)</td>
+      <td>35.8</td>
+      <td>10.0</td>
+      <td>73.0</td>
+      <td>3.0</td>
+      <td>10.0</td>
+      <td>7.0</td>
+      <td>1997.0</td>
+      <td>24.0</td>
+      <td>0.095890</td>
+      <td>0.096090</td>
+      <td>10.648493</td>
+      <td>100.169808</td>
+      <td>0.136986</td>
+      <td>2.039106</td>
+      <td>18.400922</td>
+      <td>154.599038</td>
+      <td>0.106364</td>
+      <td>24.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Aaron Mooy (1990)</td>
+      <td>83.2</td>
+      <td>9.0</td>
+      <td>100.0</td>
+      <td>2.0</td>
+      <td>5.5</td>
+      <td>7.0</td>
+      <td>1990.0</td>
+      <td>31.0</td>
+      <td>0.070000</td>
+      <td>0.077265</td>
+      <td>10.648493</td>
+      <td>127.169808</td>
+      <td>0.055000</td>
+      <td>1.201923</td>
+      <td>15.272305</td>
+      <td>184.727655</td>
+      <td>0.076362</td>
+      <td>31.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Aaron Ramsey (1990)</td>
+      <td>60.2</td>
+      <td>16.0</td>
+      <td>139.0</td>
+      <td>0.0</td>
+      <td>17.1</td>
+      <td>16.0</td>
+      <td>1990.0</td>
+      <td>31.0</td>
+      <td>0.115108</td>
+      <td>0.111123</td>
+      <td>19.648493</td>
+      <td>157.169808</td>
+      <td>0.123022</td>
+      <td>2.308970</td>
+      <td>24.272305</td>
+      <td>214.727655</td>
+      <td>0.101558</td>
+      <td>31.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Eb_Conv</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">new_Conv</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;dummyAge&#39;</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">plasma</span><span class="p">);</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span><span class="mi">100</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span><span class="mi">100</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Original EB Estimate&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;New EB Estimate&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=.</span><span class="mi">03</span><span class="p">)</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;dummyAge&#39;</span><span class="p">);</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Effect of Beta-Binomial Regression&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">15</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Chapter7_19_0.png" src="_images/Chapter7_19_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data1</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">dummyAge</span><span class="o">==</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">Conv</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">37</span><span class="p">)]</span>
+<span class="n">data2</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">dummyAge</span><span class="o">==</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">Eb_Conv</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">37</span><span class="p">)]</span>
+<span class="n">data3</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">dummyAge</span><span class="o">==</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">new_Conv</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">37</span><span class="p">)]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Age effect on conversion rate&#39;</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data1</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;20-&#39;</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="mi">21</span><span class="o">+</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">)]</span><span class="o">+</span><span class="p">[</span><span class="s1">&#39;36+&#39;</span><span class="p">],</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Age&#39;</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Raw Conv rate&#39;</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Age effect on conversion rate&#39;</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data2</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;20-&#39;</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="mi">21</span><span class="o">+</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">)]</span><span class="o">+</span><span class="p">[</span><span class="s1">&#39;36+&#39;</span><span class="p">],</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Age&#39;</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Eb Conv rate&#39;</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Age effect on conversion rate&#39;</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data3</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;20-&#39;</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="mi">21</span><span class="o">+</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">)]</span><span class="o">+</span><span class="p">[</span><span class="s1">&#39;36+&#39;</span><span class="p">],</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Age&#39;</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Regression Eb Conv rate&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Chapter7_20_0.png" src="_images/Chapter7_20_0.png" />
+</div>
+</div>
+<p>At this point, I am genuinely confused by the last plot. It’s overrating youngsters and “fine wines” a bit too much ?!!! With an enormous chasm of “meh” in between ???</p>
 </section>
 
     <script type="text/x-thebe-config">
